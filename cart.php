@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 require_once ("php/CreateDb.php");
@@ -16,8 +15,6 @@ if (isset($_POST['remove'])){
       }
   }
 }
-
-
 ?>
 
 <!doctype html>
@@ -93,12 +90,13 @@ if (isset($_POST['remove'])){
                         <h6>Amount Payable</h6>
                     </div>
                     <div class="col-md-6">
-                        <h6>$<?php echo $total; ?></h6>
+                        <h6>PHP <?php echo $total; ?></h6>
                         <h6 class="text-success">FREE</h6>
                         <hr>
-                        <h6>$<?php
+                        <h6>PHP <?php
                             echo $total;
                             ?></h6>
+							<a href ="tester.php" class="btn btn-warning my-3" name="checkout">Checkout <i class="fas fa-shopping-cart"></i></a>
                     </div>
                 </div>
             </div>

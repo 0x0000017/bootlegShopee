@@ -28,3 +28,6 @@ img{
 .price-details h6{
     padding: 3% 2%;
 }
+.monospaced { 
+	font-family: 'Ubuntu Mono', monospaced ; 
+}
