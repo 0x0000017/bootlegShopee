@@ -61,20 +61,11 @@ if (isset($_GET['add'])){
 	$result = $database->getData();
                         while ($row = mysqli_fetch_assoc($result)){
                                 if ($row['id'] == $product_id){
-                                    pDetails($row['product_image'], $row['product_name'],$row['product_price'], $row['id']);
+                                    pDetails($row['product_image'], $row['product_name'],$row['product_price'], $row['product_desc'], $row['id']);
 								}
 							}
 ?>
-<div class = "row">
-	<div class="col-md-6">
-	</div>
-	<div class=\"col-md-6\">
-<div class ="row">
-	<div class ="col-md-12">
-		<button type="submit" class="btn btn-warning my-3" name="add">Add to Cart <i class="fas fa-shopping-cart"></i></button>
-	</div>
-</div>
-</div>
+<button type="submit" class="btn btn-warning my-3 float-right" name="add">Add to Cart <i class="fas fa-shopping-cart"></i></button>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

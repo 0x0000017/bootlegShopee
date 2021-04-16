@@ -86,6 +86,7 @@ if (isset($_POST['remove'])){
                             }
                         ?>
                         <h6>Delivery Charges</h6>
+						
                         <hr>
                         <h6>Amount Payable</h6>
                     </div>
@@ -96,7 +97,7 @@ if (isset($_POST['remove'])){
                         <h6>PHP <?php
                             echo $total;
                             ?></h6>
-							<a href ="tester.php" class="btn btn-warning my-3" name="checkout">Checkout <i class="fas fa-shopping-cart"></i></a>
+							<a href ="auth.php" class="btn btn-warning my-3" name="checkout">Checkout <i class="fas fa-shopping-cart"></i></a>
                     </div>
                 </div>
             </div>

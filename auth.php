@@ -1,15 +1,15 @@
 <?php
 session_start();
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-	echo '<script>alert("Success !");</script>';
-	header("refresh: 2; url=index.php");
-	
+	header("refresh: 2; url=checkout.php");
     exit;
 }
 else {
 	header("refresh: 1; url=login.php");
+	exit;
 }
 ?>
+<!doctype html>
 <html>
 <head>
 </head>
