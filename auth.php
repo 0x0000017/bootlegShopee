@@ -5,8 +5,9 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     exit;
 }
 else {
-	header("refresh: 1; url=login.php");
-	exit;
+	$_SESSION["login_redirect"] = $_SERVER["PHP_SELF"];
+    header("Location: login.php");
+    exit;
 }
 ?>
 <!doctype html>

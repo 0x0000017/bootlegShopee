@@ -1,14 +1,15 @@
 <?php
 session_start();
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === false){
-		echo '<script>alert("Log in first !")</script>';
-		header("refresh: 2; url=login.php");
+		$_SESSION["login_redirect"] = $_SERVER["PHP_SELF"];
+		header("Location: login.php");
 		exit;
-}
+} 
 if(isset($_SESSION["filled"]) && $_SESSION["filled"] === true){
 		header("refresh: 1; url=payment.php");
 		exit;
 }
+
 // Include config file
 require_once "php/users.php";
 require_once "php/header.php";
@@ -68,6 +69,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
 				
+				session_start();
                 // store the session
 				$_SESSION["filled"] = true;
                 $_SESSION["name"] = $name; 
@@ -138,20 +140,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 			<!--City-->
 			<div class="form-group">
                 <label>City</label>
-                <input type="text" name="city" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" style = "width: 30%" >
+                <input type="text" name="city" class="form-control <?php echo (!empty($city_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $city; ?>" style = "width: 30%" maxlength="35">
                 <span class="invalid-feedback"><?php echo $city_err; ?></span>
             </div> 
 			
 			<!--Country-->
             <div class="form-group">
                 <label>Country</label>
-                <input type="text" name="country" class="form-control <?php echo (!empty($country_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $country; ?>" style = "width: 30%" >
+                <input type="text" name="country" class="form-control <?php echo (!empty($country_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $country; ?>" style = "width: 30%" maxlength="35">
                 <span class="invalid-feedback"><?php echo $country_err; ?></span>
             </div>
 
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit">
-                <input type="reset" class="btn btn-secondary ml-2" value="Reset">
+                <input type="submit" class="btn btn-primary" value="Continue">
             </div>
         </form>
     </div>   

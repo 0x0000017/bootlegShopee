@@ -102,7 +102,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 				$_SESSION["loggedin"] = true;
                 $_SESSION["email"] = $email; 
 				$_SESSION["firstName"] = $firstName;
-                header("refresh: 1 url = index.php");
+				
+				if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+								if (isset($_SESSION["login_redirect"])){
+									header("Location: " . $_SESSION["login_redirect"]);
+									unset($_SESSION["login_redirect"]);
+								}
+								else 
+								{
+									header("Location: index.php");
+								}
+				}
             } else{
                 echo "Oops! Something went wrong. Please try again later.";
             }

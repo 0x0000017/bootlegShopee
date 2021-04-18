@@ -28,7 +28,7 @@ function component($productname, $productprice, $productimg, $productid){
     ";
     echo $element;
 }	
-function cartElement($productimg, $productname, $productprice, $productid){
+function cartElement($productimg, $productname, $productprice, $productid, $product_weight){
     $element = "
     
     <form action=\"cart.php?action=remove&id=$productid\" method=\"post\" class=\"cart-items\">
@@ -45,8 +45,7 @@ function cartElement($productimg, $productname, $productprice, $productid){
                             </div>
                             <div class=\"col-md-3 py-5\">
                                 <div>
-                                    <button type=\"button\" class=\"btn bg-light border rounded-circle\"><i class=\"fas fa-minus\"></i></button>
-                                    <input type=\"text\" value=\"1\" class=\"form-control w-25 d-inline\">
+									<!--bullshit-->
                                 </div>
                             </div>
                         </div>
@@ -114,10 +113,8 @@ function pDetails($productimg, $productname, $productprice, $productdesc, $produ
 	";
 	echo $element;
 }
-function paymentLanding($productimg, $productname, $productprice, $productid){
+function paymentLanding($productimg, $productname, $productprice, $productid, $product_weight){
     $element = "
-    
-    <form action=\"cart.php?action=remove&id=$productid\" method=\"post\" class=\"cart-items\">
                     <div class=\"border rounded\">
                         <div class=\"row bg-white\">
                             <div class=\"col-md-3 pl-0\">

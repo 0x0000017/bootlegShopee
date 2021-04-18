@@ -1,13 +1,10 @@
 <?php
-// Initialize the session
 session_start();
  
-// Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     header("location: index.php");
     exit;
 }
- 
 
 require_once "php/header.php";
 require_once "php/users.php";
@@ -51,11 +48,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 mysqli_stmt_store_result($stmt);
                 
                 // Check if email exists, if yes then verify password
-                if(mysqli_stmt_num_rows($stmt) == 1){                    
+                if(mysqli_stmt_num_rows($stmt) == 1)
+				{                    
                     // Bind result variables
                     mysqli_stmt_bind_result($stmt, $id, $firstName, $email, $hashed_password);
-                    if(mysqli_stmt_fetch($stmt)){
-                        if(password_verify($password, $hashed_password)){
+                    if(mysqli_stmt_fetch($stmt))
+					{
+                        if(password_verify($password, $hashed_password))
+						{
                             // Password is correct, so start a new session
                             session_start();
                             
@@ -64,15 +64,25 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["id"] = $id;
                             $_SESSION["email"] = $email; 
 							$_SESSION["firstName"] = $firstName;
-                            
-                            // Redirect user to welcome page
-                            header("location: index.php");
-                        } else{
+							
+							if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+								if (isset($_SESSION["login_redirect"])){
+									header("Location: " . $_SESSION["login_redirect"]);
+									unset($_SESSION["login_redirect"]);
+								}
+								else 
+								{
+									header("Location: index.php");
+								}
+							}
+							
+                        } else
+						{
                             // Password is not valid, display a generic error message
                             $login_err = "Invalid email or password.";
                         }
-                    }
-                } else{
+                } else
+				{
                     // email doesn't exist, display a generic error message
                     $login_err = "Account does not exist";
                 }
@@ -84,9 +94,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             mysqli_stmt_close($stmt);
         }
     }
-    
     // Close connection
     mysqli_close($link);
+}
 }
 ?>
  

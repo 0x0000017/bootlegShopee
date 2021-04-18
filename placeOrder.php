@@ -15,6 +15,7 @@ if (isset($_POST['remove'])){
       }
   }
 }
+
 ?>
 
 <!doctype html>
@@ -43,13 +44,19 @@ if (isset($_POST['remove'])){
 <div class="container-fluid">
     <div class="row px-5">
         <div class="col-md-7">
-            <div class="shopping-cart">
-                <h6>Order Details</h6>
+            <div class="shopping-cart" 	>
+                <h6>My Cart</h6>
                 <hr>
 
                 <?php
 
                 $total = 0;
+				$shipping_fee = 100;
+				$additional_fee = 70;
+				$shipping_carrier = 1;
+				$total_weight = 0;
+				$max_weight = 1000;
+				
                     if (isset($_SESSION['cart'])){
                         $product_id = array_column($_SESSION['cart'], 'product_id');
 
@@ -57,11 +64,28 @@ if (isset($_POST['remove'])){
                         while ($row = mysqli_fetch_assoc($result)){
                             foreach ($product_id as $id){
                                 if ($row['id'] == $id){
-                                    paymentLanding($row['product_image'], $row['product_name'],$row['product_price'], $row['id']);
+                                    paymentLanding($row['product_image'], 
+												$row['product_name'],
+												$row['product_price'], 
+												$row['id'], 
+												$row['product_weight']);
                                     $total = $total + (int)$row['product_price'];
+									$total_weight = $total_weight + (int)$row['product_weight'];
+									if ($total_weight > $max_weight){
+										$total = $total + $additional_fee;
+										if ($total_weight > 2000 ){
+											$additional_fee = $additional_fee + 70;
+										}
+										$shipping_carrier = $shipping_carrier + 1;
+									}
+
                                 }
                             }
+							
                         }
+						
+                    }else{
+                        echo "<h5>Cart is Empty</h5>";
                     }
 
                 ?>
@@ -69,9 +93,8 @@ if (isset($_POST['remove'])){
             </div>
         </div>
         <div class="col-md-4 offset-md-1 border rounded mt-5 bg-white h-25">
-
             <div class="pt-4">
-                <h6>Transaction Details</h6>
+                <h6>PRICE DETAILS</h6>
                 <hr>
                 <div class="row price-details">
                     <div class="col-md-6">
@@ -84,27 +107,88 @@ if (isset($_POST['remove'])){
                             }
                         ?>
                         <h6>Delivery Charges</h6>
-						<h6>Shipping Information</h6>
+						<h6>Total Weight</h6>
+						<h6>Shipping Carriers </h6>
+						
                         <hr>
-						<hr>
-						<br>
                         <h6>Amount Payable</h6>
                     </div>
                     <div class="col-md-6">
                         <h6>PHP <?php echo $total; ?></h6>
-                        <h6 class="text-success">FREE</h6>
-						<h6>Cash on Delivery,  Will be delivered by 05/05/2021</h6>
+                        <h6 class="text-success">PHP 
+						<?php 
+							if ($total_weight > $max_weight) {
+								$shipping_fee = $shipping_fee + $additional_fee;
+								echo $shipping_fee;
+							} else if ($total_weight == 0) {
+								$shipping_fee = 0;
+								echo $shipping_fee;
+							} else {
+								echo $shipping_fee;
+							}
+							
+							?>
+						</h6>
+						<h6><?php echo $total_weight?> grams</h6>
+						<h6>
+						<?php 
+							if ($total_weight == 0) {
+								$shipping_carrier = 0;
+								echo $shipping_carrier;
+							} else {
+								echo $shipping_carrier;
+							}
+							?> carrier/s
+						</h6>
                         <hr>
                         <h6>PHP <?php
-                            echo $total;
+                            echo $total = $total + $shipping_fee;
                             ?></h6>
-							<br>
-							<a href ="index.php" class="btn btn-warning my-3" name="checkout">Go back to home</a>
+							
+							
                     </div>
                 </div>
             </div>
-
-        </div>
+			<div class="pt-4">
+                <h6>CUSTOMER INFORMATION</h6>
+                <hr>
+                <div class="row price-details">
+                    <div class="col-md-6">
+                        <h6>Name</h6>
+                        <h6>Address</h6>
+						<hr>
+						<h6>City/Province</h6>
+						<h6>Country</h6>
+						
+                    </div>
+                    <div class="col-md-6">
+                        <h6><?php 
+								if($_SESSION['name']) {
+									echo $_SESSION['name'];
+								}
+							?>
+						</h6>
+                        <h6><?php 
+								if($_SESSION['addr1']) {
+									echo $_SESSION['addr1'];
+								}
+							?>
+						</h6>
+						<h6><?php 
+								if($_SESSION['city']) {
+									echo $_SESSION['city'];
+								}
+							?>
+						</h6>
+						<h6><?php 
+								if($_SESSION['country']) {
+									echo $_SESSION['country'];
+								}
+							?>
+						</h6>
+                        <hr>
+						<a href ="index.php" class="btn btn-warning my-3" name="checkout">Go back to home</a>
+					</div>
     </div>
 </div>
 
