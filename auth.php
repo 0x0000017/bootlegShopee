@@ -11,10 +11,8 @@ else {
 }
 ?>
 <!doctype html>
-<html>
-<head>
-</head>
+<html>	
 <body>
-<P>REDIRECTING</p>
+	<p>REDIRECTING</p>
 </body>
 </html>

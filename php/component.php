@@ -9,17 +9,17 @@ function component($productname, $productprice, $productimg, $productid){
                             <img src=\"$productimg\" alt=\"Image1\" class=\"img-thumbnail\" height =200 width = 200></a>
                         <div class=\"card-body\">
                             <a href=\"productDetails.php?id=$productid\"><h6 class=\"card-title\">$productname</h6>
-                            <h7>
+                            <h6>
                                 <i class=\"fas fa-star\"></i>
                                 <i class=\"fas fa-star\"></i>
                                 <i class=\"fas fa-star\"></i>
                                 <i class=\"fas fa-star\"></i>
                                 <i class=\"far fa-star\"></i>
-                            </h7>
-                            <h7>
+                            </h6>
+                            <h6>
 								<br>
                                 <span class=\"price\">PHP $productprice</span><br> 
-                            </h7>				
+                            </h6>				
                              <input type='hidden' name='product_id' value='$productid'>
                         </div>
                     </div>
@@ -28,9 +28,8 @@ function component($productname, $productprice, $productimg, $productid){
     ";
     echo $element;
 }	
-function cartElement($productimg, $productname, $productprice, $productid, $product_weight){
+function cartElement($productimg, $productname, $productprice, $productid, $quantity){
     $element = "
-    
     <form action=\"cart.php?action=remove&id=$productid\" method=\"post\" class=\"cart-items\">
                     <div class=\"border rounded\">
                         <div class=\"row bg-white\">
@@ -45,7 +44,9 @@ function cartElement($productimg, $productname, $productprice, $productid, $prod
                             </div>
                             <div class=\"col-md-3 py-5\">
                                 <div>
-									<!--bullshit-->
+										<h5>Quantity:</h5>
+										x<input type=\"text\" value=\"1\" class=\"form-control w-25 d-inline\" name=\"qtty\" >
+										/$quantity
                                 </div>
                             </div>
                         </div>
@@ -113,7 +114,7 @@ function pDetails($productimg, $productname, $productprice, $productdesc, $produ
 	";
 	echo $element;
 }
-function paymentLanding($productimg, $productname, $productprice, $productid, $product_weight){
+function paymentLanding($productimg, $productname, $productprice, $productid){
     $element = "
                     <div class=\"border rounded\">
                         <div class=\"row bg-white\">

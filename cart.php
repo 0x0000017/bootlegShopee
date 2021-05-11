@@ -1,11 +1,8 @@
 <?php
 session_start();
-
+$qtty = '';
 require_once ("php/CreateDb.php");
-require_once ("php/component.php");
-
 $db = new CreateDb("Productdb", "Producttb");
-
 if (isset($_POST['remove'])){
   if ($_GET['action'] == 'remove'){
       foreach ($_SESSION['cart'] as $key => $value){
@@ -15,6 +12,7 @@ if (isset($_POST['remove'])){
       }
   }
 }
+
 ?>
 
 <!doctype html>
@@ -24,15 +22,11 @@ if (isset($_POST['remove'])){
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cart</title>
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.css" />
-
-    <!-- Bootstrap CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
+    <title>Cart - Home 家 Store</title>
     <link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu+Mono">
 </head>
 <body class="bg-light">
 
@@ -51,32 +45,56 @@ if (isset($_POST['remove'])){
 
                 $total = 0;
 				$shipping_fee = 100;
-				$additional_fee = 70;
-				$shipping_carrier = 1;
-				$total_weight = 0;
-				$max_weight = 1000;
 				
                     if (isset($_SESSION['cart'])){
                         $product_id = array_column($_SESSION['cart'], 'product_id');
 
                         $result = $db->getData();
-                        while ($row = mysqli_fetch_assoc($result)){
+                        while ($rw = mysqli_fetch_assoc($result)){
+							$_SESSION['product_name'] = $rw['product_name'];
+							$id = $rw['id'];
+							$pname = $rw['product_name'];
+							$pprice = $rw['product_price'];
+							$pimage = $rw['product_image'];
+							$quantity = $rw['product_stock'];                                   
                             foreach ($product_id as $id){
-                                if ($row['id'] == $id){
-                                    cartElement($row['product_image'], 
-												$row['product_name'],
-												$row['product_price'], 
-												$row['id'], 
-												$row['product_weight']);
-                                    $total = $total + (int)$row['product_price'];
-									$total_weight = $total_weight + (int)$row['product_weight'];
-									if ($total_weight > $max_weight){
-										$total = $total + $additional_fee;
-										if ($total_weight > 2000 ){
-											$additional_fee = $additional_fee + 70;
-										}
-										$shipping_carrier = $shipping_carrier + 1;
-									}
+                                if ($rw['id'] == $id){
+									echo '
+									<form action="cart.php?action=remove&id=',$id,'" method="POST" class="cart-items">
+									<div class="border rounded">
+										<div class="row bg-white">
+											<div class="col-md-3 pl-0">
+												<img src=',$pimage,' alt="Image1" class="img-fluid">
+											</div>
+											<div class="col-md-6">
+												<h5 class="pt-2">',$pname,'</h5>
+												<small class="text-secondary">Seller: definitelyNotScam</small>
+												<h5 class="pt-2">PHP ',$pprice,'</h5>	
+												<button type="submit" class="btn btn-danger mx-2" name="remove">Remove</button>
+											</div>
+											<div class="col-md-3 py-5">
+												<div>
+												<div class="center">
+													<div class="input-group">
+														<span class="input-group-btn">
+															<button type="button" class="btn btn-danger btn-number"  data-type="minus" data-field="quant[2]">
+															<i class = "fas fa-minus"></i>
+															</button>
+														</span>
+														<input type="text" name="quant[2]" class="form-control input-number" value="0" min="1" max=" ',$quantity,' ">
+															<span class="input-group-btn">
+																<button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[2]">
+																<i class = "fas fa-plus"></i>
+																</button>
+															</span>
+													</div>
+												</div>	
+												</div>
+											</div>
+										</div>
+									</div>
+									</form>';
+									$total = $total + (int)$pprice;
 
                                 }
                             }
@@ -101,69 +119,120 @@ if (isset($_POST['remove'])){
                         <?php
                             if (isset($_SESSION['cart'])){
                                 $count  = count($_SESSION['cart']);
-                                echo "<h6>Price ($count items)</h6>";
-                            }else{
-                                echo "<h6>Price (0 items)</h6>";
+                                echo "<h6>Price</h6>";
                             }
                         ?>
                         <h6>Delivery Charges</h6>
-						<h6>Total Weight</h6>
-						<h6>Shipping Carriers </h6>
-						
                         <hr>
-                        <h6>Amount Payable</h6>
+                        <h4>Amount Payable</h4>
                     </div>
                     <div class="col-md-6">
                         <h6>PHP <?php echo $total; ?></h6>
-                        <h6 class="text-success">PHP 
-						<?php 
-							if ($total_weight > $max_weight) {
-								$shipping_fee = $shipping_fee + $additional_fee;
-								echo $shipping_fee;
-							} else if ($total_weight == 0) {
-								$shipping_fee = 0;
-								echo $shipping_fee;
-							} else {
-								echo $shipping_fee;
-							}
-							
-							?>
+                        
 						</h6>
-						<h6><?php echo $total_weight?> grams</h6>
-						<h6>						
+						<h6 class="text-success">PHP 						
 						<?php 
-							if ($total_weight == 0) {
-								$shipping_carrier = 0;
-								echo $shipping_carrier;
+							if ($total == 0) {
+								$shipping_fee = $shipping_fee * 0;
+								echo $shipping_fee;
 							} else {
-								echo $shipping_carrier;
+								echo $shipping_fee;
 							}
-							?> carrier/s
+						?>
 						</h6>
                         <hr>
-                        <h6>PHP <?php
+                        <h4>PHP <?php
                             echo $total = $total + $shipping_fee;
-                            ?></h6>
-							<?php 
-								if ($total_weight == 0) {
+                            ?></h4>
+							<?php 	
+								if ($total == 0) {
 									echo '<a href ="auth.php" class="btn btn-warning my-3 disabled" name="checkout">Checkout <i class="fas fa-shopping-cart"></i></a>';
 								} else {
 									echo '<a href ="auth.php" class="btn btn-warning my-3 name="checkout">Checkout <i class="fas fa-shopping-cart"></i></a>';
 								}
 							?>
-
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+$('.btn-number').click(function(e){
+    e.preventDefault();
+    
+    fieldName = $(this).attr('data-field');
+    type      = $(this).attr('data-type');
+    var input = $("input[name='"+fieldName+"']");
+    var currentVal = parseInt(input.val());
+    if (!isNaN(currentVal)) {
+        if(type == 'minus') {
+            
+            if(currentVal > input.attr('min')) {
+                input.val(currentVal - 1).change();
+            } 
+            if(parseInt(input.val()) == input.attr('min')) {
+                $(this).attr('disabled', true);
+            }
 
+        } else if(type == 'plus') {
 
+            if(currentVal < input.attr('max')) {
+                input.val(currentVal + 1).change();
+            }
+            if(parseInt(input.val()) == input.attr('max')) {
+                $(this).attr('disabled', true);
+            }
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        }
+    } else {
+        input.val(0);
+    }
+});
+$('.input-number').focusin(function(){
+   $(this).data('oldValue', $(this).val());
+});
+$('.input-number').change(function() {
+    
+    minValue =  parseInt($(this).attr('min'));
+    maxValue =  parseInt($(this).attr('max'));
+    valueCurrent = parseInt($(this).val());
+    
+    name = $(this).attr('name');
+    if(valueCurrent >= minValue) {
+        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('Sorry, the minimum value was reached');
+        $(this).val($(this).data('oldValue'));
+    }
+    if(valueCurrent <= maxValue) {
+        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+    } else {
+        alert('Sorry, the maximum value was reached');
+        $(this).val($(this).data('oldValue'));
+    }
+    
+    
+});
+$(".input-number").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+             // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) || 
+             // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,9 +1,9 @@
 
 <header id="header">
-    <nav class="navbar navbar-expand-lg py-4 navbar-dark" style="background-color: #EE4D2D;">
+    <nav class="navbar navbar-expand-lg py-4 navbar-dark" style="background-color: #2a52be;">
         <a href="index.php" class="navbar-brand">
             <h3 class="px-5">
-                <i class="fas fa-shopping-basket"></i> bootleg Shopee
+                <i class="fas fa-shopping-basket"></i> Home 家 Store
             </h3>
         </a>
         <button class="navbar-toggler"
