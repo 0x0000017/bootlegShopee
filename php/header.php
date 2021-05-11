@@ -3,7 +3,7 @@
     <nav class="navbar navbar-expand-lg py-4 navbar-dark" style="background-color: #2a52be;">
         <a href="index.php" class="navbar-brand">
             <h3 class="px-5">
-                <i class="fas fa-shopping-basket"></i> Home 家 Store
+                <i class="fas fa-shopping-basket"></i> Whats 店 Shop
             </h3>
         </a>
         <button class="navbar-toggler"

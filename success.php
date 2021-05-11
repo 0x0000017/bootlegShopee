@@ -9,7 +9,7 @@ session_start();
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Success ! - Home хо╢ Store</title>
+    <title>Success ! - WhatsShop</title>
 
     <link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
@@ -27,7 +27,7 @@ session_start();
 
 	<div class = "loading">Order successfully sent !<br> You will be redirected to home page within 5 seconds </div>
 	<?php 
-		session_unset();
+		unset($_SESSION["cart"]);
 		header("refresh: 5; url=index.php");
 	?>
 </div>
